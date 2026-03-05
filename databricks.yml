@@ -1,0 +1,30 @@
+bundle:
+  name: advito-lakebase
+
+workspace:
+  profile: fe-vm-serverless-jsr0s9
+
+resources:
+  postgres_projects:
+    advito_lakebase:
+      project_id: 'advito-lakebase'
+      display_name: 'Advito Lakebase POC'
+      pg_version: 17
+
+  postgres_branches:
+    dev:
+      parent: ${resources.postgres_projects.advito_lakebase.id}
+      branch_id: 'dev'
+      no_expiry: true
+
+  postgres_endpoints:
+    dev_rw:
+      parent: ${resources.postgres_branches.dev.id}
+      endpoint_id: 'primary'
+      endpoint_type: 'ENDPOINT_TYPE_READ_WRITE'
+      autoscaling_limit_min_cu: 0.5
+      autoscaling_limit_max_cu: 4
+
+targets:
+  dev:
+    default: true
